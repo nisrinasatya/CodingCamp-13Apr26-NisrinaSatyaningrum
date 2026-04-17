@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Expense &amp; Budget Visualizer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"
+      integrity="sha512-CQBWl4fJHWbryGE+Pc3UJWW1h6zdKqbsIZ803cruzCrqYMgHLmN/d9NuecZlkQKrZIeGaHeQD+/0Nx4q4dGFw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+  <body>
+    <header>
+      <h1>Expense &amp; Budget Visualizer</h1>
+
+      <!-- Balance Display -->
+      <section id="balance-section" aria-label="Balance summary">
+        <div id="balance-display">
+          Total: <span id="total-amount">IDR 0.00</span>
+        </div>
+      </section>
+    </header>
+
+    <main>
+      <!-- Input Form -->
+      <section id="form-section" aria-label="Add a transaction">
+        <h2>Add Transaction</h2>
+        <form id="transaction-form" novalidate>
+          <div class="field-group">
+            <label for="item-name">Item Name</label>
+            <input
+              type="text"
+              id="item-name"
+              name="item-name"
+              placeholder="e.g. Coffee"
+              autocomplete="off"
+            />
+            <span class="error" id="name-error" role="alert" aria-live="polite"></span>
+          </div>
+
+          <div class="field-group">
+            <label for="amount">Amount</label>
+            <input
+              type="number"
+              id="amount"
+              name="amount"
+              min="0.01"
+              step="0.01"
+              placeholder="0.00"
+            />
+            <span class="error" id="amount-error" role="alert" aria-live="polite"></span>
+          </div>
+
+          <div class="field-group">
+            <label for="category">Category</label>
+            <select id="category" name="category">
+              <!-- Populated dynamically by script.js -->
+            </select>
+          </div>
+
+          <button type="submit">Add Transaction</button>
+        </form>
+      </section>
+
+      <!-- Transaction List -->
+      <section id="list-section" aria-label="Transaction list">
+        <h2>Transactions</h2>
+
+        <!-- Monthly Summary controls -->
+        <div id="monthly-summary" aria-label="Monthly summary filter">
+          <label for="month-filter">Filter by month:</label>
+          <input type="month" id="month-filter" name="month-filter" />
+          <button id="clear-month-btn" type="button">Clear</button>
+        </div>
+
+        <!-- Sort control -->
+        <div class="sort-controls">
+          <label for="sort-select">Sort by:</label>
+          <select id="sort-select" name="sort-select">
+            <option value="default">Default (newest first)</option>
+            <option value="amount-asc">Amount: Low to High</option>
+            <option value="amount-desc">Amount: High to Low</option>
+            <option value="category-az">Category: A–Z</option>
+            <option value="category-za">Category: Z–A</option>
+          </select>
+        </div>
+
+        <ul id="transaction-list" aria-label="List of transactions">
+          <!-- Populated dynamically by script.js -->
+        </ul>
+      </section>
+
+      <!-- Pie Chart -->
+      <section id="chart-section" aria-label="Spending by category chart">
+        <h2>Spending by Category</h2>
+        <canvas id="spending-chart" role="img" aria-label="Pie chart of spending by category"></canvas>
+        <p id="chart-empty-msg">No transactions yet.</p>
+      </section>
+
+      <!-- Category Manager -->
+      <section id="category-section" aria-label="Category manager">
+        <h2>Manage Categories</h2>
+        <div class="category-form">
+          <label for="new-category">New Category</label>
+          <input
+            type="text"
+            id="new-category"
+            name="new-category"
+            placeholder="e.g. Dining"
+            autocomplete="off"
+          />
+          <button id="add-category-btn" type="button">Add Category</button>
+          <span class="error" id="category-error" role="alert" aria-live="polite"></span>
+        </div>
+      </section>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
