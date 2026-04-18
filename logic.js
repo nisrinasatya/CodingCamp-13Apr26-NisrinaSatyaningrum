@@ -1,7 +1,10 @@
 class Transaction {
   constructor(crypto, name, amount, category)
   {
-    this.id = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()
+    this.id = typeof crypto !== 'undefined' && crypto.randomUUID
+      ? crypto.randomUUID() 
+      : Date.now().toString();
+    
     this.name = name;
     this.amount = Number(amount);
     this.category = category;
