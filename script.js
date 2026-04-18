@@ -276,6 +276,11 @@ function handleTransactionSubmit(event) {
   const amount   = rawAmount === '' ? '' : Number(rawAmount);
   const category = categoryEl.value;
 
+   const dateInput = document.getElementById('transaction-date');
+   const selectedDate = dateInput.value
+     ? new Date(dateInput.value).toISOString()
+     : new Date().toISOString();
+
   // --- Validate ---
   const { valid, errors } = validateTransaction(name, amount);
 
@@ -299,7 +304,7 @@ function handleTransactionSubmit(event) {
   //   date:     new Date().toISOString(),
   // };
 
-  var transaction = new Transaction(crypto, name, amount, category);
+  var transaction = new Transaction(crypto, name, amount, category, selectedDate);
   console.log('Retrieved transaction data: ', JSON.stringify(transaction));
 
   if(transactions === undefined) transactions = [];
