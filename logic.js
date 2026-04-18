@@ -5,7 +5,7 @@ class Transaction {
     this.name = name;
     this.amount = Number(amount);
     this.category = category;
-    this.date = new Date().toISOString();
+    this.date = date
   }
 }
 // Pure logic functions — exported for property-based testing
