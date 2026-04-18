@@ -1,3 +1,13 @@
+class Transaction {
+  constructor(crypto, name, amount, category)
+  {
+    this.id = typeof crypto !== 'undefined' && crypto.randomUUID ? crypto.randomUUID() : Date.now().toString()
+    this.name = name;
+    this.amount = Number(amount);
+    this.category = category;
+    this.date = new Date().toISOString();
+  }
+}
 // Pure logic functions — exported for property-based testing
 // This module is DOM-free and can be imported by tests/properties.js
 // All functions will be implemented in task 3.
