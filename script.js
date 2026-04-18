@@ -513,6 +513,26 @@ function render() {
 // ============================================================
 // DOMContentLoaded — wires event listeners and boots the app
 // ============================================================ */
+function renderCategoryList() {
+  const list = document.getElementById('category-list');
+  list.innerHTML = '';
+
+  customCategories.forEach(function(cat) {
+    const li = document.createElement('li');
+
+    const span = document.createElement('span');
+    span.textContent = cat;
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Delete';
+    btn.dataset.category = cat;
+
+    li.appendChild(span);
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   // --- Load persisted state ---
   transactions      = loadTransactions();
@@ -530,6 +550,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // --- Boot the UI ---
   populateCategoryDropdown();
+  renderCategoryList();
   render();
 
   // --- transaction-form submit handler (task 7.2) ---
@@ -577,12 +598,38 @@ document.addEventListener('DOMContentLoaded', function () {
     customCategories.push(name);
     saveCategories();
     populateCategoryDropdown();
+    renderCategoryList();
     input.value = '';
   });
 
   document.getElementById('new-category').addEventListener('input', function () {
     document.getElementById('category-error').textContent = '';
   });
+
+   // --- Delete Category ---
+document.getElementById('category-list').addEventListener('click', function (event) {
+  const btn = event.target.closest('button');
+  if (!btn) return;
+
+  const categoryToDelete = btn.dataset.category;
+
+  // remove transactions under this category
+  transactions = transactions.filter(function (tx) {
+    return tx.category !== categoryToDelete;
+  });
+  saveTransactions();
+
+  // remove category itself
+  customCategories = customCategories.filter(function (cat) {
+    return cat !== categoryToDelete;
+  });
+  saveCategories();
+
+  // update UI
+  populateCategoryDropdown();
+  renderCategoryList();
+  render();
+});
 
   // --- Monthly Summary filtering (task 12) ---
 document.getElementById('month-filter').addEventListener('change', function (event) {
