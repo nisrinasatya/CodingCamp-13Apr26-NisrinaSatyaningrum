@@ -96,6 +96,7 @@ let activeSort = 'default';
  * via filterByMonth(). Affects the transaction list, balance, and chart.
  */
 let activeMonth = null;
+let activeCategory = "";
 
 /**
  * chartInstance — Chart | null
@@ -233,6 +234,19 @@ function populateCategoryDropdown() {
     option.textContent = cat;
     select.appendChild(option);
   });
+   
+   const categoryFilter = document.getElementById("category-filter");
+   
+   if (categoryFilter) {
+    categoryFilter.innerHTML = '<option value="">All</option>';
+
+    cats.forEach(function (cat) {
+      const option = document.createElement("option");
+      option.value = cat;
+      option.textContent = cat;
+      categoryFilter.appendChild(option);
+    });
+  }
 }
 
 /**
@@ -472,7 +486,14 @@ function render() {
     return;
   }
    
-  const filteredTransactions  = filterByMonth(transactions, activeMonth);
+  let filteredTransactions  = filterByMonth(transactions, activeMonth);
+
+   if (activeCategory) {
+  filteredTransactions = filteredTransactions.filter(function (tx) {
+    return tx.category === activeCategory;
+     });
+   }
+   
   const displayedTransactions = sortTransactions(filteredTransactions, activeSort);
 
   renderList(displayedTransactions);
@@ -559,21 +580,30 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   // --- Monthly Summary filtering (task 12) ---
-  document.getElementById('month-filter').addEventListener('change', function (event) {
-    activeMonth = event.target.value || null;
-    if (typeof render === 'function') {
-      render();
-    }
-  });
+document.getElementById('month-filter').addEventListener('change', function (event) {
+  activeMonth = event.target.value || null;
 
-  document.getElementById('clear-month-btn').addEventListener('click', function () {
-    activeMonth = null;
-    document.getElementById('month-filter').value = '';
-    if (typeof render === 'function') {
-      render();
-    }
-  });
+  if (typeof render === 'function') {
+    render();
+  }
+});
 
+document.getElementById('category-filter').addEventListener('change', function (event) {
+  activeCategory = event.target.value || "";
+
+  if (typeof render === 'function') {
+    render();
+  }
+});
+
+document.getElementById('clear-month-btn').addEventListener('click', function () {
+  activeMonth = null;
+  document.getElementById('month-filter').value = '';
+
+  if (typeof render === 'function') {
+    render();
+  }
+});
   // --- Sort control (task 13) ---
   document.getElementById('sort-select').addEventListener('change', function (event) {
     activeSort = event.target.value;
