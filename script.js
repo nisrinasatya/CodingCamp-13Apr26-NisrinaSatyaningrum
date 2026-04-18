@@ -602,27 +602,27 @@ document.addEventListener('DOMContentLoaded', function () {
     input.value = '';
   });
 
-  document.getElementById('new-category').addEventListener('input', function () {
-    document.getElementById('category-error').textContent = '';
-  });
-
-   // --- Delete Category ---
-document.getElementById('category-list').addEventListener('click', function (event) {
+  document.getElementById('category-list').addEventListener('click', function (event) {
   const btn = event.target.closest('button');
   if (!btn) return;
 
   const categoryToDelete = btn.dataset.category;
 
-  // remove transactions under this category
-  transactions = transactions.filter(function (tx) {
-    return tx.category !== categoryToDelete;
+  // ✅ CHECK FIRST — is category used?
+  const isUsed = transactions.some(function (tx) {
+    return tx.category === categoryToDelete;
   });
-  saveTransactions();
 
-  // remove category itself
+  if (isUsed) {
+    showToast('Cannot delete category that is used in transactions.');
+    return; // STOP — do NOT delete
+  }
+
+  // SAFE TO DELETE
   customCategories = customCategories.filter(function (cat) {
     return cat !== categoryToDelete;
   });
+
   saveCategories();
 
   // update UI
