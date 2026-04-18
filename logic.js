@@ -1,5 +1,5 @@
 class Transaction {
-  constructor(crypto, name, amount, category)
+  constructor(crypto, name, amount, category, date)
   {
     this.id = typeof crypto !== 'undefined' && crypto.randomUUID
       ? crypto.randomUUID() 
