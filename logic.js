@@ -78,11 +78,9 @@ function calculateBalance(transactions) {
  * @returns {string} A currency-formatted string, e.g. "IDR 1,234.56".
  */
 function formatCurrency(amount) {
-  return Number(amount).toLocaleString('en-US', {
-    style: 'currency',
-    currency: 'IDR',
+  return 'Rp' + amount.toLocaleString('id-ID', {
     minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    maximumFractionDigits: 2
   });
 }
 
