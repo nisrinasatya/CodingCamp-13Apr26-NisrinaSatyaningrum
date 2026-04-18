@@ -179,6 +179,11 @@ function saveCategories() {
  */
 function loadTransactions() {
   const raw = localStorage.getItem(STORAGE_KEY_TX);
+  if(raw === null)
+  {
+    console.log('No data of key ', STORAGE_KEY_TX,' is found');
+    return;
+  }
   return deserializeTransactions(raw);
 }
 
@@ -192,6 +197,11 @@ function loadTransactions() {
  */
 function loadCategories() {
   const raw = localStorage.getItem(STORAGE_KEY_CATS);
+  if(raw === null)
+  {
+    console.log('No category of key ', STORAGE_KEY_CATS, ' is found');
+    return;
+  }
   return deserializeCategories(raw);
 }
 
@@ -208,7 +218,18 @@ function loadCategories() {
 function populateCategoryDropdown() {
   const select = document.getElementById('category');
   select.innerHTML = '';
-  [...BUILT_IN_CATEGORIES, ...customCategories].forEach(function (cat) {
+  if(customCategories === null || customCategories === undefined)
+  {
+    console.log("Categories are not found or undefined!");
+    return;
+  }
+  var cats = [...BUILT_IN_CATEGORIES, ...customCategories];
+  if(cats === null)
+  {
+    console.log("Categories are not found");
+    return;
+  }
+  cats.forEach(function (cat) {
     const option = document.createElement('option');
     option.value = cat;
     option.textContent = cat;
@@ -256,15 +277,20 @@ function handleTransactionSubmit(event) {
   }
 
   // --- Build transaction object ---
-  const transaction = {
-    id:       typeof crypto !== 'undefined' && crypto.randomUUID
-                ? crypto.randomUUID()
-                : Date.now().toString(),
-    name,
-    amount:   Number(amount),
-    category,
-    date:     new Date().toISOString(),
-  };
+  // const transaction = {
+  //   id:       typeof crypto !== 'undefined' && crypto.randomUUID
+  //               ? crypto.randomUUID()
+  //               : Date.now().toString(),
+  //   name,
+  //   amount:   Number(amount),
+  //   category,
+  //   date:     new Date().toISOString(),
+  // };
+
+  var transaction = new Transaction(crypto, name, amount, category);
+  console.log('Retrieved transaction data: ', JSON.stringify(transaction));
+
+  if(transactions === undefined) transactions = [];
 
   // --- Mutate state ---
   transactions.push(transaction);
@@ -442,6 +468,17 @@ function renderChart(items) {
  * Requirements: 3.2, 3.3, 4.2, 4.3, 6.3, 7.2, 7.3
  */
 function render() {
+  if(transactions === null || transactions === undefined)
+  {
+    console.log("Transactions are empty! (logic.js nya ngga masuk bangshaaaaaaat)");
+    return;
+  }
+  if(activeMonth === null || activeMonth === undefined)
+  {
+    console.log("Active month is empty!");
+    return;
+  }
+
   const filteredTransactions  = filterByMonth(transactions, activeMonth);
   const displayedTransactions = sortTransactions(filteredTransactions, activeSort);
 
