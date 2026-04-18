@@ -181,8 +181,8 @@ function loadTransactions() {
   const raw = localStorage.getItem(STORAGE_KEY_TX);
   if(raw === null)
   {
-    console.log('No data of key ', STORAGE_KEY_TX,' is found');
-    return;
+    console.log('No data found, initializing empty transactions');
+    return [];
   }
   return deserializeTransactions(raw);
 }
@@ -199,8 +199,8 @@ function loadCategories() {
   const raw = localStorage.getItem(STORAGE_KEY_CATS);
   if(raw === null)
   {
-    console.log('No category of key ', STORAGE_KEY_CATS, ' is found');
-    return;
+    console.log('No categories found, initializing empty array');
+    return [];
   }
   return deserializeCategories(raw);
 }
@@ -218,11 +218,9 @@ function loadCategories() {
 function populateCategoryDropdown() {
   const select = document.getElementById('category');
   select.innerHTML = '';
-  if(customCategories === null || customCategories === undefined)
-  {
-    console.log("Categories are not found or undefined!");
-    return;
-  }
+  if (!Array.isArray(customCategories)) {
+  customCategories = [];
+}
   var cats = [...BUILT_IN_CATEGORIES, ...customCategories];
   if(cats === null)
   {
@@ -470,15 +468,10 @@ function renderChart(items) {
 function render() {
   if(transactions === null || transactions === undefined)
   {
-    console.log("Transactions are empty! (logic.js nya ngga masuk bangshaaaaaaat)");
+    console.log("Transactions are empty!");
     return;
   }
-  if(activeMonth === null || activeMonth === undefined)
-  {
-    console.log("Active month is empty!");
-    return;
-  }
-
+   
   const filteredTransactions  = filterByMonth(transactions, activeMonth);
   const displayedTransactions = sortTransactions(filteredTransactions, activeSort);
 
